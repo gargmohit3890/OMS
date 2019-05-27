@@ -104,6 +104,42 @@ public class RestControllerTest
 
 	}
 	
+	/**
+	 * test case to update number of bricks for an invalid order reference.
+	 * @throws Exception
+	 */
+	@Test
+	public void put_5() throws Exception {
+		RestApiController restApiController = new RestApiController();
+		Order order = new Order();
+		order.setOrder_reference(UUID.fromString("844006cd-60c8-4fe3-b498-23ae6d8b75e6"));
+		order.setNumber_of_bricks(5);
+		ResponseEntity<Order> responseOfGet = restApiController.update(order);
+		Order order1 = responseOfGet.getBody();
+		assertEquals(order1, null);
+
+	}
+
+	/**
+	 * This method is used to update the number of bricks for valid order reference
+	 * @throws Exception
+	 */
+	@Test
+	public void put_6() throws Exception {
+		RestApiController restApiController = new RestApiController();
+		Order order = new Order();
+		order.setNumber_of_bricks(5);
+		ResponseEntity<Order> response = restApiController.createOrder(order);
+		Order obj = response.getBody();
+		UUID uuid = obj.getOrder_reference();
+		order.setOrder_reference(uuid);
+		order.setNumber_of_bricks(10);
+		restApiController.update( order);
+		ResponseEntity<Order> responseOfGet = restApiController.findById(uuid);
+		System.out.println(responseOfGet.toString());
+		//assertEquals(responseOfGet.getBody().getNumber_of_bricks(), 10);
+
+	}
 	
 
 }

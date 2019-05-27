@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -82,4 +83,29 @@ public class RestApiController {
 		return ResponseEntity.ok(orders);
 
 	}
+	
+	/**
+	 * This method is used to update the number of bricks for an order
+	 * @param order
+	 * @return
+	 */
+	@PutMapping("orders")
+	public ResponseEntity<Order> update(@Valid @RequestBody Order order) {
+		UUID id = order.getOrder_reference();
+		if (id == null) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		Order order1 = placedOrders.get(id);
+		if (order1 != null) {
+			order1.setNumber_of_bricks(order.getNumber_of_bricks());
+			placedOrders.put(id, order1);
+			order.setNumber_of_bricks(0);
+			return ResponseEntity.ok(order);
+
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+
+	}
+
 }
