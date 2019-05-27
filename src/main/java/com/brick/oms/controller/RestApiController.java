@@ -107,5 +107,23 @@ public class RestApiController {
 		}
 
 	}
+	
+	/**
+	 * This method is used to mark an order as dispatched
+	 * @param id
+	 * @return
+	 */
+	@PutMapping("orders/{id}/fulfilorder")
+	public ResponseEntity<Order> updateDispatchStatus(@PathVariable UUID id) {
+		Order order1 = placedOrders.get(id);
+		if (order1 != null) {
+			order1.setFulfil_order(1);
+			placedOrders.put(id, order1);
+			return ResponseEntity.ok(null);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+
+	}
 
 }

@@ -134,10 +134,36 @@ public class RestControllerTest
 		UUID uuid = obj.getOrder_reference();
 		order.setOrder_reference(uuid);
 		order.setNumber_of_bricks(10);
-		restApiController.update( order);
-		ResponseEntity<Order> responseOfGet = restApiController.findById(uuid);
-		System.out.println(responseOfGet.toString());
-		//assertEquals(responseOfGet.getBody().getNumber_of_bricks(), 10);
+		ResponseEntity<Order> upateResponse = restApiController.update( order);
+		assertEquals(upateResponse.getBody().getOrder_reference(), uuid);
+	}
+	
+	/**
+	 * test case to update the dispatch status for a valid order reference. 
+	 * @throws Exception
+	 */
+	@Test 
+	public void put_7() throws Exception {
+		RestApiController restApiController = new RestApiController();
+		Order order = new Order();
+		order.setNumber_of_bricks(5);
+		ResponseEntity<Order> response = restApiController.createOrder(order);
+		UUID createUUID = response.getBody().getOrder_reference();
+		restApiController.updateDispatchStatus(createUUID);
+		ResponseEntity<Order> responseOfGet = restApiController.findById(createUUID);
+		assertEquals(responseOfGet.getBody().getFulfil_order(), 1);
+
+	}
+	
+	/**
+	 * test case to update the dispatch status for a invalid order reference. 
+	 * @throws Exception
+	 */
+	@Test 
+	public void put_8() throws Exception {
+		RestApiController restApiController = new RestApiController();
+		ResponseEntity<Order> responseFulfilment = restApiController.updateDispatchStatus(UUID.fromString("844006cd-60c8-4fe3-b498-23ae6d8b75e6"));
+		assertEquals(responseFulfilment.getStatusCodeValue(), 400); 
 
 	}
 	

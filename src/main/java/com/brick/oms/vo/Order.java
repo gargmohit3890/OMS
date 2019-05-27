@@ -9,7 +9,13 @@ public class Order {
 	
 	private UUID order_reference;
 	private int number_of_bricks;
-	
+	private int fulfil_order;
+	public int getFulfil_order() {
+		return fulfil_order;
+	}
+	public void setFulfil_order(int fulfil_order) {
+		this.fulfil_order = fulfil_order;
+	}
 	public UUID getOrder_reference() {
 		return order_reference;
 	}
