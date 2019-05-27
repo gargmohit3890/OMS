@@ -167,5 +167,39 @@ public class RestControllerTest
 
 	}
 	
+	/**
+	 * test case to update the number of bricks for order which is already dispatched
+	 * @throws Exception
+	 */
+	@Test 
+	public void put_9() throws Exception {
+		RestApiController restApiController = new RestApiController();
+		Order order = new Order();
+		order.setNumber_of_bricks(5);
+		ResponseEntity<Order> response = restApiController.createOrder(order);
+		UUID createUUID = response.getBody().getOrder_reference();
+		restApiController.updateDispatchStatus(createUUID);
+		order.setOrder_reference(createUUID);
+		ResponseEntity<Order> responseBricks = restApiController.update(order);;
+		assertEquals(responseBricks.getStatusCodeValue(), 400); 
+	}
+	
+	
+	/**
+	 * test case to update the dispatch status for order which is already dispatched
+	 * @throws Exception
+	 */
+	@Test 
+	public void put_10() throws Exception {
+		RestApiController restApiController = new RestApiController();
+		Order order = new Order();
+		order.setNumber_of_bricks(5);
+		ResponseEntity<Order> response = restApiController.createOrder(order);
+		UUID createUUID = response.getBody().getOrder_reference();
+		restApiController.updateDispatchStatus(createUUID);
+		ResponseEntity<Order> responseFulfilemt = restApiController.updateDispatchStatus(createUUID);
+		assertEquals(responseFulfilemt.getStatusCodeValue(), 400); 
+
+	}
 
 }

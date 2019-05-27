@@ -97,10 +97,14 @@ public class RestApiController {
 		}
 		Order order1 = placedOrders.get(id);
 		if (order1 != null) {
-			order1.setNumber_of_bricks(order.getNumber_of_bricks());
-			placedOrders.put(id, order1);
-			order.setNumber_of_bricks(0);
-			return ResponseEntity.ok(order);
+			if (order1.getFulfil_order() == 0) {
+				order1.setNumber_of_bricks(order.getNumber_of_bricks());
+				placedOrders.put(id, order1);
+				order.setNumber_of_bricks(0);
+				return ResponseEntity.ok(order);
+			} else {
+				return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			}
 
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -117,9 +121,13 @@ public class RestApiController {
 	public ResponseEntity<Order> updateDispatchStatus(@PathVariable UUID id) {
 		Order order1 = placedOrders.get(id);
 		if (order1 != null) {
+			if (order1.getFulfil_order() == 0) {
 			order1.setFulfil_order(1);
 			placedOrders.put(id, order1);
 			return ResponseEntity.ok(null);
+			} else {
+				return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			}
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
